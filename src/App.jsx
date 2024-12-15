@@ -21,7 +21,7 @@ const App = () => {
   // Fonction pour récupérer les données du backend
   const fetchData = () => {
     axios
-      .get('http://localhost:3001/api/formations')
+      .get('https://backend-3yq5.onrender.com/api/formations')  
       .then(response => {
         // console.log('Données reçues:', response.data);
         setNotes(response.data);
@@ -36,7 +36,7 @@ const App = () => {
   
     if (modifi) {  // Si on est en mode modification
       axios
-        .put(`http://localhost:3001/api/formations/${identifiant}`, noteObject)
+        .put(`https://backend-3yq5.onrender.com/api/formations/${identifiant}`, noteObject)
         .then((response) => {
           // Mettre à jour l'état avec la formation modifiée
           setNotes(prevNotes => {
@@ -51,7 +51,7 @@ const App = () => {
         .catch(error => console.error('Erreur:', error));
     } else {  // Si on est en mode ajout
       axios
-        .post('http://localhost:3001/api/formations', noteObject)
+        .post('https://backend-3yq5.onrender.com/api/formations', noteObject)
         .then((response) => {
           console.log('Formation ajoutée:', response.data);
           fetchData();  // Mettre à jour la liste des formations après ajout
@@ -67,7 +67,7 @@ const App = () => {
   // Fonction pour supprimer une formation
   const deleteNote = (id) => {
     axios
-      .delete(`http://localhost:3001/api/formations/${id}`)
+      .delete(`https://backend-3yq5.onrender.com/api/formations/${id}`)
       .then(() => fetchData())  // Rafraîchir les données après suppression
       .catch(error => console.error('Erreur lors de la suppression:', error));
   };
