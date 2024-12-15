@@ -3,138 +3,204 @@ import axios from 'axios';
 
 const App = () => {
   const [notes, setNotes] = useState([]);
-  const [donne, setDonne] = useState({ prenom: "", email: "", telephone: "" });
+  const [donne, setDonne] = useState({
+    nomFormation: "",
+    dateFormation: "",
+    maxParticipants: "",
+    thematique: "",
+    prix: "",
+  });
   const [modifi, setModifi] = useState(false);
   const [identifiant, setId] = useState(null);
 
+  // Charger les données au démarrage
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/api/formations')
-      .then(response => setNotes(response.data))
-      .catch(error => console.error('Erreur lors du chargement des données:', error));
+    fetchData();
   }, []);
 
+  // Fonction pour récupérer les données du backend
+  const fetchData = () => {
+    axios
+      .get('http://localhost:3001/api/formations')
+      .then(response => {
+        // console.log('Données reçues:', response.data);
+        setNotes(response.data);
+      })
+      .catch(error => console.error('Erreur:', error));
+  };
+
+  // Fonction pour ajouter ou modifier une formation
   const addNote = (event) => {
     event.preventDefault();
     const noteObject = { ...donne };
-
-    if (modifi) {
+  
+    if (modifi) {  // Si on est en mode modification
       axios
         .put(`http://localhost:3001/api/formations/${identifiant}`, noteObject)
-        .then(() => {
-          setDonne({ prenom: "", email: "", telephone: "" });
-          setModifi(false);
+        .then((response) => {
+          // Mettre à jour l'état avec la formation modifiée
+          setNotes(prevNotes => {
+            const updatedNotes = prevNotes.map(note =>
+              note._id === identifiant ? response.data : note
+            );
+            return updatedNotes;
+          });
+          fetchData();  
+          resetForm();  // Réinitialiser le formulaire après la modification
         })
-        .catch(error => console.error('Erreur lors de la modification de la note:', error));
-    } else {
+        .catch(error => console.error('Erreur:', error));
+    } else {  // Si on est en mode ajout
       axios
         .post('http://localhost:3001/api/formations', noteObject)
-        .then(response => {
-          setNotes([...notes, response.data]);
-          setDonne({ prenom: "", email: "", telephone: "" });
+        .then((response) => {
+          console.log('Formation ajoutée:', response.data);
+          fetchData();  // Mettre à jour la liste des formations après ajout
+          resetForm();  // Réinitialiser le formulaire après l'ajout
         })
-        .catch(error => console.error('Erreur lors de l\'ajout de la note:', error));
+        .catch(error => {
+          console.error('Erreur:', error.response?.data || error);
+        });
     }
   };
+  
 
+  // Fonction pour supprimer une formation
   const deleteNote = (id) => {
     axios
       .delete(`http://localhost:3001/api/formations/${id}`)
-      .then(() => setNotes(notes.filter(note => note._id !== id)))
-      .catch(error => console.error('Erreur lors de la suppression de la note:', error));
+      .then(() => fetchData())  // Rafraîchir les données après suppression
+      .catch(error => console.error('Erreur lors de la suppression:', error));
   };
 
+//   Pré-remplir le formulaire pour la modification
   const updater = (id) => {
     const note = notes.find(n => n._id === id);
     setModifi(true);
     setId(id);
-    setDonne({ prenom: note.prenom, email: note.email, telephone: note.telephone });
+    setDonne({
+      nomFormation: note.nomFormation,
+      dateFormation: note.dateFormation,
+      maxParticipants: note.maxParticipants,
+      thematique: note.thematique,
+      prix: note.prix,
+    });
   };
 
+  // Réinitialiser le formulaire
+  const resetForm = () => {
+    setDonne({
+      nomFormation: "",
+      dateFormation: "",
+      maxParticipants: "",
+      thematique: "",
+      prix: "",
+    });
+    setModifi(false);
+    setId(null);
+  };
+
+  // Gérer les changements dans le formulaire
   const handleChange = (e) => {
     const { name, value } = e.target;
     setDonne(prev => ({ ...prev, [name]: value }));
   };
 
   return (
-    <div className="container mx-auto p-5">
-      <h1 className="text-3xl font-bold text-center my-8 text-sky-700">Gestion des Notes</h1>
-      <form onSubmit={addNote} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">Prénom</label>
-          <input
-            type="text"
-            name="prenom"
-            value={donne.prenom}
-            onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
+    <div className="container-fluid flex flex-col">
+      <h1 className="font-bold text-center my-5 text-2xl">Gestion des Formations</h1>
+      <form onSubmit={addNote} className="bg-white p-5 shadow-md rounded mb-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label>Nom de la formation</label>
+            <input
+              type="text"
+              name="nomFormation"
+              value={donne.nomFormation}
+              onChange={handleChange}
+              className="input border w-full p-2 rounded"
+              required
+            />
+          </div>
+          <div>
+            <label>Date de la formation</label>
+            <input
+              type="date"
+              name="dateFormation"
+              value={donne.dateFormation}
+              onChange={handleChange}
+              className="input border w-full p-2 rounded"
+              required
+            />
+          </div>
+          <div>
+            <label>Nombre de participants max</label>
+            <input
+              type="number"
+              name="maxParticipants"
+              value={donne.maxParticipants}
+              onChange={handleChange}
+              className="input border w-full p-2 rounded"
+              required
+            />
+          </div>
+          <div>
+            <label>Thématique</label>
+            <input
+              type="text"
+              name="thematique"
+              value={donne.thematique}
+              onChange={handleChange}
+              className="input border w-full p-2 rounded"
+              required
+            />
+          </div>
+          <div>
+            <label>Prix</label>
+            <input
+              type="number"
+              step="0.01"
+              name="prix"
+              value={donne.prix}
+              onChange={handleChange}
+              className="input border w-full p-2 rounded"
+              required
+            />
+          </div>
         </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={donne.email}
-            onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-        </div>
-        <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-bold mb-2">Téléphone</label>
-          <input
-            type="number"
-            name="telephone"
-            value={donne.telephone}
-            onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-        </div>
-        <div className="flex items-center justify-between">
-          <button
-            type="submit"
-            className="bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          >
-            {modifi ? "Modifier" : "Ajouter"}
-          </button>
-        </div>
+        <button
+  type="submit"
+  className="mt-5 w-1/3 bg-sky-500 text-white py-2 rounded font-semibold shadow text-sm mx-auto block"
+>
+  {modifi ? "Modifier" : "Ajouter"}
+</button>
+
       </form>
 
-      <h2 className="text-xl font-semibold my-5">Liste des Notes</h2>
-      <div className="overflow-x-auto">
-        <table className="table-auto w-full text-left border-collapse border border-gray-300">
-          <thead className="bg-gray-200">
-            <tr>
-              <th className="border border-gray-300 px-4 py-2">Prénom</th>
-              <th className="border border-gray-300 px-4 py-2">Email</th>
-              <th className="border border-gray-300 px-4 py-2">Téléphone</th>
-              <th className="border border-gray-300 px-4 py-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {notes.map(note => (
-              <tr key={note._id} className="hover:bg-gray-100">
-                <td className="border border-gray-300 px-4 py-2">{note.prenom}</td>
-                <td className="border border-gray-300 px-4 py-2">{note.email}</td>
-                <td className="border border-gray-300 px-4 py-2">{note.telephone}</td>
-                <td className="border border-gray-300 px-4 py-2 flex gap-2">
-                  <button
-                    onClick={() => updater(note._id)}
-                    className="bg-yellow-500 text-white px-3 py-1 rounded"
-                  >
-                    Modifier
-                  </button>
-                  <button
-                    onClick={() => deleteNote(note._id)}
-                    className="bg-red-500 text-white px-3 py-1 rounded"
-                  >
-                    Supprimer
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {notes.map(note => (
+        <div key={note._id} className="card bg-gray-100 p-4 rounded shadow-lg">
+        <h2 className="text-lg font-bold">{note.nomFormation}</h2>
+        <p>Date: {note.dateFormation ? new Date(note.dateFormation).toLocaleDateString() : "Non spécifiée"}</p>
+        <p>Participants max: {note.maxParticipants || "Non spécifié"}</p>
+        <p>Thématique: {note.thematique || "Non spécifiée"}</p>
+        <p>Prix: {note.prix || 0} €</p>
+        <div className="mt-3 flex gap-2">
+          <button
+            onClick={() => updater(note._id)}
+            className="bg-yellow-500 text-white px-3 py-1 rounded shadow"
+          >
+            Modifier
+          </button>
+          <button
+            onClick={() => deleteNote(note._id)}
+            className="bg-red-500 text-white px-3 py-1 rounded shadow"
+          >
+            Supprimer
+          </button>
+        </div>
+      </div>
+      
+        ))}
       </div>
     </div>
   );
