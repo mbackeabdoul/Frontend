@@ -158,7 +158,7 @@ const FormationDetails = () => {
 <div className="p-8 bg-gray-50 border-t">
   <h2 className="text-2xl font-bold text-gray-800 mb-4">Description</h2>
   <p className="text-gray-700 leading-relaxed">
-    {formation.description || 'Aucune description disponible'}
+    {formation.description || 'Descriptions bi jappandiwul'}
   </p>
 </div>
 
