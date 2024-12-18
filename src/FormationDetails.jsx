@@ -25,6 +25,7 @@ const FormationDetails = () => {
         const response = await axios.get(`https://backend-3yq5.onrender.com/api/formations/${id}`);
         setFormation(response.data);
         setLoading(false);
+        console.log(response.data)
       } catch (error) {
         console.error('Erreur de chargement des détails:', error);
         setLoading(false);
@@ -154,12 +155,12 @@ const FormationDetails = () => {
         </div>
 
         {/* Description */}
-        <div className="p-8 bg-gray-50 border-t">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Description</h2>
-          <p className="text-gray-700 leading-relaxed">
-            {formation.description || 'Aucune description disponible'}
-          </p>
-        </div>
+<div className="p-8 bg-gray-50 border-t">
+  <h2 className="text-2xl font-bold text-gray-800 mb-4">Description</h2>
+  <p className="text-gray-700 leading-relaxed">
+    {formation.description || 'Aucune description disponible'}
+  </p>
+</div>
 
         {/* Informations de création et modification */}
         <div className="p-8 bg-white border-t">
