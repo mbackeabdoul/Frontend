@@ -32,7 +32,7 @@ const Navbar = ({ onAddFormation }) => {
             alt="Logo" 
             className="h-10 w-auto mr-4"
           />
-          <span className="text-xl font-bold text-green-600">Daarul Mahaarifi Islaamiyya</span>
+          <span className="text-xl font-bold text-green-600">Daarul Mahaarif Al Islaami</span>
         </button>
 
         {/* Menu Desktop */}
