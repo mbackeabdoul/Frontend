@@ -15,14 +15,14 @@ const App = () => {
     // description: " ", // N'oubliez pas d'ajouter la description
   });
 
-  // Nouveautés : gestion de l'édition
+  // gestion de l'édition
   const [modifi, setModifi] = useState(false);
   const [identifiant, setId] = useState(null);
 
   const [showForm, setShowForm] = useState(false);
   const [query, setQuery] = useState("");
 
-  // Ajoutez useLocation pour lire les paramètres de l'URL
+  //useLocation pour lire les paramètres de l'URL
   const location = useLocation();
 
   // Méthode pour afficher le formulaire
@@ -34,17 +34,16 @@ const App = () => {
   useEffect(() => {
     fetchData();
 
-    // Nouvelle logique pour détecter l'édition via l'URL
     const searchParams = new URLSearchParams(location.search);
     const editId = searchParams.get('edit');
 
-    // Si un ID d'édition est présent dans l'URL
+    // Si un ID d'édition est présent ci URL bi
     if (editId) {
-      // Trouver la formation à éditer dans la liste des notes
+      // Trouver la formation à éditer 
       const formationToEdit = notes.find(note => note._id === editId);
 
       if (formationToEdit) {
-        // Pré-remplir le formulaire avec les données de la formation
+        // Pré-remplir le formulaire ak les données de la formation
         setDonne({
           nomFormation: formationToEdit.nomFormation,
           dateFormation: formationToEdit.dateFormation,
@@ -60,9 +59,8 @@ const App = () => {
         setId(editId);
       }
     }
-  }, [location.search, notes.length]); // Dépendances pour re-déclencher l'effet
+  }, [location.search, notes.length]); 
 
-  // Le reste de votre code reste identique
   const fetchData = () => {
     axios
       .get('https://backend-3yq5.onrender.com/api/formations')
@@ -77,11 +75,9 @@ const App = () => {
     const noteObject = { ...donne };
 
     if (modifi) {
-      // Logique de modification
       axios
         .put(`https://backend-3yq5.onrender.com/api/formations/${identifiant}`, noteObject)
         .then((response) => {
-          // Mettre à jour la liste des notes
           setNotes(prevNotes =>
             prevNotes.map(note =>
               note._id === identifiant ? { ...note, ...noteObject } : note
@@ -95,7 +91,6 @@ const App = () => {
           fetchData();
         });
     } else {
-      // Logique d'ajout (reste identique)
       axios
         .post('https://backend-3yq5.onrender.com/api/formations', noteObject)
         .then((response) => {
@@ -109,7 +104,6 @@ const App = () => {
         });
     }
   };
-  // Le reste de votre code reste identique
   const resetForm = () => {
     setDonne({
       nomFormation: "",
@@ -117,7 +111,6 @@ const App = () => {
       maxParticipants: "",
       thematique: "",
       prix: "",
-      // description:""
     });
     setModifi(false);
     setId(null);
@@ -178,12 +171,11 @@ const App = () => {
   );
   return (
 
-    <div className="min-h-screen bg-gray-50 pt-20"> {/* Ajoutez pt-20 pour compenser la navbar fixe */}
+    <div className="min-h-screen bg-gray-50 pt-20"> 
       <Navbar
         onAddFormation={handleAddFormation}
         onHomeClick={handleReturnHome}
       />
-      {/* Votre barre de recherche */}
       <div className="container mx-auto p-5 flex justify-between items-center">
         <input
           type="text"
@@ -331,7 +323,7 @@ const App = () => {
   );
 };
 
-// Wrapper component avec Router
+// pour Router yi
 const AppRouter = () => {
   return (
     <Router>

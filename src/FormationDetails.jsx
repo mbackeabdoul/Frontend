@@ -3,14 +3,14 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from './Navbar';
 import image from '../src/images/image.png';
-import { 
-  CalendarIcon, 
-  ClockIcon, 
-  UsersIcon, 
-  TagIcon, 
-  DollarSignIcon, 
-  EditIcon, 
-  TrashIcon 
+import {
+  CalendarIcon,
+  ClockIcon,
+  UsersIcon,
+  TagIcon,
+  DollarSignIcon,
+  EditIcon,
+  TrashIcon
 } from 'lucide-react';
 
 const FormationDetails = () => {
@@ -47,7 +47,7 @@ const FormationDetails = () => {
     }
   };
 
-  // Fonction pour formater la date et l'heure
+  //pour formater la date et l'heure
   const formatDateTime = (dateString) => {
     if (!dateString) return 'Non disponible';
     const date = new Date(dateString);
@@ -70,8 +70,8 @@ const FormationDetails = () => {
       <div className="min-h-screen bg-red-50 flex items-center justify-center">
         <div className="bg-white p-10 rounded-xl shadow-2xl text-center">
           <h2 className="text-3xl font-bold text-red-500 mb-6">Formation Non Trouvée</h2>
-          <Link 
-            to="/" 
+          <Link
+            to="/"
             className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-300"
           >
             Retour à la liste
@@ -83,33 +83,30 @@ const FormationDetails = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-      
+
       <div className="max-w-4xl mx-auto bg-white shadow-2xl rounded-2xl overflow-hidden">
-           {/* Ajoutez la Navbar */}
-      <Navbar 
-        onAddFormation={() => {
-          // Action optionnelle si vous voulez une action spécifique
-          navigate('/?showForm=true');
-        }} 
-      />
-        {/* En-tête de la formation */}
+        <Navbar
+          onAddFormation={() => {
+            // Action optionnelle boo beuggee une action spécifique
+            navigate('/?showForm=true');
+          }}
+        />
+
         <div className="bg-green-600 text-white p-6 text-center">
           <h1 className="text-4xl font-bold mb-2">{formation.nomFormation}</h1>
           <p className="text-green-100">Détails complets de la formation</p>
         </div>
 
-        {/* Contenu principal */}
         <div className="grid md:grid-cols-2 gap-8 p-8">
-          {/* Colonne Image */}
+
           <div className="flex items-center justify-center">
-            <img 
+            <img
               src={image}
               alt={formation.nomFormation}
               className="rounded-xl shadow-lg max-h-96 object-cover"
             />
           </div>
 
-          {/* Colonne Détails */}
           <div className="space-y-6">
             <div className="bg-gray-50 p-4 rounded-lg shadow-md">
               <div className="flex items-center mb-2">
@@ -154,15 +151,13 @@ const FormationDetails = () => {
           </div>
         </div>
 
-        {/* Description */}
-<div className="p-8 bg-gray-50 border-t">
-  <h2 className="text-2xl font-bold text-gray-800 mb-4">Description</h2>
-  <p className="text-gray-700 leading-relaxed">
-    {formation.description || 'Descriptions bi jappandiwul'}
-  </p>
-</div>
+        <div className="p-8 bg-gray-50 border-t">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Description</h2>
+          <p className="text-gray-700 leading-relaxed">
+            {formation.description || 'Descriptions bi jappandiwul'}
+          </p>
+        </div>
 
-        {/* Informations de création et modification */}
         <div className="p-8 bg-white border-t">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Historique</h2>
           <div className="grid md:grid-cols-2 gap-4">
@@ -181,7 +176,7 @@ const FormationDetails = () => {
                 <div>
                   <h3 className="font-semibold text-gray-700">Dernière Modification</h3>
                   <p className="text-gray-900">
-                    {formation.dateModification 
+                    {formation.dateModification
                       ? formatDateTime(formation.dateModification)
                       : 'Aucune modification'}
                   </p>
@@ -191,15 +186,14 @@ const FormationDetails = () => {
           </div>
         </div>
 
-        {/* Actions */}
         <div className="p-8 bg-gray-100 flex justify-center space-x-4">
-          <Link 
+          <Link
             to={`/?edit=${id}`}
             className="bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 transition duration-300 flex items-center"
           >
             <EditIcon className="mr-2" /> Modifier
           </Link>
-          <button 
+          <button
             onClick={handleDelete}
             className="bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 transition duration-300 flex items-center"
           >
@@ -207,10 +201,9 @@ const FormationDetails = () => {
           </button>
         </div>
 
-        {/* Retour */}
         <div className="p-4 text-center bg-white">
-          <Link 
-            to="/" 
+          <Link
+            to="/"
             className="text-blue-600 hover:text-blue-800 transition duration-300 flex items-center justify-center"
           >
             ← Retour à la liste des formations

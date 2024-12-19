@@ -25,7 +25,6 @@ const Navbar = ({ onAddFormation }) => {
   return (
     <nav className="bg-white shadow-md fixed top-0 left-0 right-0 z-50">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-        {/* Logo */}
         <button onClick={handleHomeClick} className="flex items-center">
           <img 
             src={logo} 
@@ -35,7 +34,6 @@ const Navbar = ({ onAddFormation }) => {
           <span className="text-xl font-bold text-green-600">Daarul Mahaarif Al Islaami</span>
         </button>
 
-        {/* Menu Desktop */}
         <div className="hidden md:flex items-center space-x-6">
           <button 
             onClick={handleHomeClick}
@@ -51,7 +49,6 @@ const Navbar = ({ onAddFormation }) => {
           </button>
         </div>
 
-        {/* Menu hamburgers pour mobile */}
         <div className="md:hidden">
           <button 
             onClick={toggleMenu} 
@@ -62,7 +59,6 @@ const Navbar = ({ onAddFormation }) => {
         </div>
       </div>
 
-      {/* Menu Mobile */}
       {menuOpen && (
         <div className="md:hidden bg-white shadow-md">
           <div className="container mx-auto px-4 py-3 space-y-4">
